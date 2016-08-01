@@ -110,13 +110,27 @@ var Carousel = React.createClass({
   },
 
   renderLeftArr() {
-    var {leftArr, arrowsTopOffset, arrStyle} = this.props;
+    var {
+      leftArr,
+      arrowsTopOffset,
+      arrStyle,
+      children,
+      loop
+    } = this.props;
+    
     var {activePage} = this.state;
 
     var prev = activePage - 1;
-    var onPress = prev >= 0
-      ? () => this.scrollTo(prev)
-      : () => null;
+
+    var onPress;
+    if (prev >= 0) {
+      onPress = () => this.scrollTo(prev);
+    } else {
+      onPress = loop
+        ? () => this.scrollTo(children.length - 1)
+        : () => null;
+    }
+    
     
     return (
       <View style={[styles.leftArrCont, {top: arrowsTopOffset}]}>
@@ -128,13 +142,26 @@ var Carousel = React.createClass({
   },
 
   renderRightArr() {
-    var {rightArr, arrowsTopOffset, arrStyle, children} = this.props;
+    var {
+      rightArr,
+      arrowsTopOffset,
+      arrStyle,
+      children,
+      loop
+    } = this.props;
+
     var {activePage} = this.state;
 
     var next = activePage + 1;
-    var onPress = next < children.length
-      ? () => this.scrollTo(next)
-      : () => null;
+
+    var onPress;
+    if (next < children.length) {
+      onPress = () => this.scrollTo(next);
+    } else {
+      onPress = loop
+        ? () => this.scrollTo(0)
+        : () => null;
+    }
 
     return (
       <View style={[styles.rightArrCont, {top: arrowsTopOffset}]}>
