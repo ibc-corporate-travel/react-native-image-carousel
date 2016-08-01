@@ -17,5 +17,5 @@ module.exports = StyleSheet.create({
   defaultInactiveIndicatorStyle: {
     fontSize: 50,
     color: '#999999',
-  }
+  },
 });
