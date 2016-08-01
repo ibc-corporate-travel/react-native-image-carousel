@@ -29,6 +29,10 @@ var Carousel = React.createClass({
       animate: true,
       delay: 1000,
       loop: true,
+      rightArr: '▶',
+      leftArr: '◀',
+      arrStyle: styles.defaultArr,
+      arrowsTopOffset: 50,
     };
   },
 
@@ -56,7 +60,7 @@ var Carousel = React.createClass({
     }
   },
 
-  indicatorPressed(activePage) {
+  scrollTo(activePage) {
     this.setState({activePage});
     this.refs.pager.scrollToPage(activePage);
   },
@@ -87,7 +91,7 @@ var Carousel = React.createClass({
         <Text
           style={style}
           key={i}
-          onPress={this.indicatorPressed.bind(this,i)}
+          onPress={this.scrollTo.bind(this,i)}
         >
           { i === this.state.activePage  ? this.props.indicatorText : this.props.inactiveIndicatorText }
         </Text>
@@ -101,6 +105,42 @@ var Carousel = React.createClass({
     return (
       <View style={[styles.pageIndicator, position, indicatorStyle]}>
         {indicators}
+      </View>
+    );
+  },
+
+  renderLeftArr() {
+    var {leftArr, arrowsTopOffset, arrStyle} = this.props;
+    var {activePage} = this.state;
+
+    var prev = activePage - 1;
+    var onPress = prev >= 0
+      ? () => this.scrollTo(prev)
+      : () => null;
+    
+    return (
+      <View style={[styles.leftArrCont, {top: arrowsTopOffset}]}>
+        <Text style={[styles.defaultArr, arrStyle]} onPress={onPress}>
+          {leftArr}
+        </Text>
+      </View>
+    );
+  },
+
+  renderRightArr() {
+    var {rightArr, arrowsTopOffset, arrStyle, children} = this.props;
+    var {activePage} = this.state;
+
+    var next = activePage + 1;
+    var onPress = next < children.length
+      ? () => this.scrollTo(next)
+      : () => null;
+
+    return (
+      <View style={[styles.rightArrCont, {top: arrowsTopOffset}]}>
+        <Text style={[styles.defaultArr, arrStyle]} onPress={onPress}>
+          {rightArr}
+        </Text>
       </View>
     );
   },
@@ -120,7 +160,7 @@ var Carousel = React.createClass({
       return;
     }
 
-    this.indicatorPressed(activePage);
+    this.scrollTo(activePage);
     this._setUpTimer();
   },
 
@@ -148,6 +188,8 @@ var Carousel = React.createClass({
           {this.props.children}
         </CarouselPager>
         {this.renderPageIndicator()}
+        {this.renderLeftArr()}
+        {this.renderRightArr()}
       </View>
     );
   },

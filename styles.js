@@ -18,4 +18,19 @@ module.exports = StyleSheet.create({
     fontSize: 50,
     color: '#999999',
   },
+
+  leftArrCont: {
+    position: 'absolute',
+    left: 0
+  },
+
+  rightArrCont: {
+    position: 'absolute',
+    right: 0
+  },
+
+  defaultArr: {
+    color: '#000000',
+    fontSize: 30,
+  },
 });
