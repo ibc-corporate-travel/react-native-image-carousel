@@ -30,8 +30,8 @@ var Carousel = React.createClass({
       animate: true,
       delay: 1000,
       loop: true,
-      rightArr: '▶',
-      leftArr: '◀',
+      rightArr: '〉',
+      leftArr: '〈',
       arrStyle: styles.defaultArr,
       arrowsTopOffset: 50,
     };
