@@ -66,6 +66,20 @@ var Carousel = React.createClass({
     this.refs.pager.scrollToPage(activePage);
   },
 
+  wrapArrow(arrow) {
+    var {arrStyle} = this.props;
+
+    if (typeof arrow === 'string') {
+      //text or unicode char
+      return <Text style={[styles.defaultArr, arrStyle]}>
+        {arrow}
+      </Text>;
+    } else {
+      //component
+      return arrow;
+    }
+  },
+
   renderPageIndicator() {
     if (this.props.hideIndicators === true) {
       return null;
@@ -114,7 +128,6 @@ var Carousel = React.createClass({
     var {
       leftArr,
       arrowsTopOffset,
-      arrStyle,
       children,
       loop
     } = this.props;
@@ -132,22 +145,11 @@ var Carousel = React.createClass({
         : () => null;
     }
 
-    let arrow;
-    if (typeof leftArr === 'string') {
-      //text or unicode char
-      arrow = <Text style={[styles.defaultArr, arrStyle]} onPress={onPress}>
-        {leftArr}
-      </Text>;
-    } else {
-      //component
-      arrow = leftArr;
-    }
-
 
     return (
       <View style={[styles.leftArrCont, {top: arrowsTopOffset}]}>
         <TouchableOpacity onPress={onPress}>
-          {arrow}
+          {this.wrapArrow(leftArr)}
         </TouchableOpacity>
       </View>
     );
@@ -157,7 +159,6 @@ var Carousel = React.createClass({
     var {
       rightArr,
       arrowsTopOffset,
-      arrStyle,
       children,
       loop
     } = this.props;
@@ -177,9 +178,9 @@ var Carousel = React.createClass({
 
     return (
       <View style={[styles.rightArrCont, {top: arrowsTopOffset}]}>
-        <Text style={[styles.defaultArr, arrStyle]} onPress={onPress}>
-          {rightArr}
-        </Text>
+        <TouchableOpacity onPress={onPress}>
+          {this.wrapArrow(rightArr)}
+        </TouchableOpacity>
       </View>
     );
   },
