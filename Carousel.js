@@ -2,10 +2,11 @@
 
 var React = require('react');
 var {
-      Dimensions,
-      Text,
-      View,
-    } = require('react-native');
+  Dimensions,
+  Text,
+  View,
+  TouchableOpacity
+} = require('react-native');
 
 var TimerMixin = require('react-timer-mixin');
 var CarouselPager = require('./CarouselPager');
@@ -55,7 +56,7 @@ var Carousel = React.createClass({
       this.refs.pager.scrollToPage(this.props.initialPage, false);
     }
 
-    if (this.props.animate && this.props.children){
+    if (this.props.animate && this.props.children) {
       this._setUpTimer();
     }
   },
@@ -71,8 +72,8 @@ var Carousel = React.createClass({
     }
 
     var indicators = [],
-        indicatorStyle = this.props.indicatorAtBottom ? { bottom: this.props.indicatorOffset } : { top: this.props.indicatorOffset },
-        style, position;
+      indicatorStyle = this.props.indicatorAtBottom ? {bottom: this.props.indicatorOffset} : {top: this.props.indicatorOffset},
+      style, position;
 
     position = {
       width: this.props.children.length * this.props.indicatorSpace,
@@ -93,7 +94,7 @@ var Carousel = React.createClass({
           key={i}
           onPress={this.scrollTo.bind(this,i)}
         >
-          { i === this.state.activePage  ? this.props.indicatorText : this.props.inactiveIndicatorText }
+          { i === this.state.activePage ? this.props.indicatorText : this.props.inactiveIndicatorText }
         </Text>
       );
     }
@@ -117,7 +118,7 @@ var Carousel = React.createClass({
       children,
       loop
     } = this.props;
-    
+
     var {activePage} = this.state;
 
     var prev = activePage - 1;
@@ -130,13 +131,24 @@ var Carousel = React.createClass({
         ? () => this.scrollTo(children.length - 1)
         : () => null;
     }
-    
-    
+
+    let arrow;
+    if (typeof leftArr === 'string') {
+      //text or unicode char
+      arrow = <Text style={[styles.defaultArr, arrStyle]} onPress={onPress}>
+        {leftArr}
+      </Text>;
+    } else {
+      //component
+      arrow = leftArr;
+    }
+
+
     return (
       <View style={[styles.leftArrCont, {top: arrowsTopOffset}]}>
-        <Text style={[styles.defaultArr, arrStyle]} onPress={onPress}>
-          {leftArr}
-        </Text>
+        <TouchableOpacity onPress={onPress}>
+          {arrow}
+        </TouchableOpacity>
       </View>
     );
   },
