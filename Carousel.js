@@ -96,7 +96,7 @@ var Carousel = React.createClass({
       if (children[i] === undefined) continue;
 
       const isActive  = i === activePage;
-      
+
       const {indicatorStyle, inactiveIndicatorStyle} = this.props;
       const style = isActive ? indicatorStyle : inactiveIndicatorStyle;
 
@@ -107,7 +107,7 @@ var Carousel = React.createClass({
         <Text
           style   = {style}
           key     = {i}
-          onPress = {() => this.scrollTo(i)}
+          onPress = {this.scrollTo.bind(this, i)}
         >
           {text}
         </Text>
