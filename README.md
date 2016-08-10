@@ -17,6 +17,7 @@ indicatorOffset={250} // Indicator relative position from top or bottom
 onPageChange={callback} // Called when the active page changes
 inactiveIndicatorText= '•' // Inactive indicator content ( You can customize to use any Unicode character )
 indicatorText= '•' // Active indicator content ( You can customize to use any Unicode character )
+indicatorsPadding=3 // Amount of padding indicators on left and right sides;
 
 animate={true} // Enable carousel autoplay
 delay={1000} // Set Animation delay between slides
@@ -26,7 +27,7 @@ leftArr={'〈'}, // Left arr char. Can be text or React.Component.
 rightArr={'〉'}, // Right arr char. Can be text or React.Component.
 arrStyle={color: '#000000', fontSize: 30} // Styles for text(unicode?) arrows. It be applied only to text arrows!
 arrowsTopOffset={50} // Arrows position from top
- 
+
 ```
 
 ### Usage example

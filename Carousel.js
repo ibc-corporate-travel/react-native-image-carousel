@@ -24,6 +24,7 @@ var Carousel = React.createClass({
       indicatorOffset: 250,
       indicatorText: '•',
       inactiveIndicatorText: '•',
+      indicatorsPadding: 3,
       width: null,
       initialPage: 0,
       indicatorSpace: 25,
@@ -81,20 +82,68 @@ var Carousel = React.createClass({
   },
 
   calcIndicatorsPosition(indicatorContWidth) {
-    return (this.getWidth() - indicatorContWidth) / 2;
+    const isWidthContainIndicators = this.getWidth() > indicatorContWidth;
+    if (isWidthContainIndicators) {
+      return (this.getWidth() - indicatorContWidth) / 2;
+    }
+
+    const {indicatorSpace} = this.props;
+    const {activePage} = this.state;
+    const spaceToActiveIndicator = activePage * indicatorSpace;
+
+    const diff = spaceToActiveIndicator - this.getWidth();
+    if (diff >= 0) {
+      return -(diff + indicatorSpace);
+    } else {
+      return 0;
+    }
+  },
+
+  addPaddingsToIndicators(indicators, indicatorContWidth) {
+    const isWidthContainIndicators = this.getWidth() > indicatorContWidth;
+    if (isWidthContainIndicators) return indicators;
+
+    const {
+      children,
+      indicatorsPadding,
+      inactiveIndicatorStyle,
+      inactiveIndicatorText
+    } = this.props;
+
+    for (let i = 1, l = indicatorsPadding; i <= l; i++) {
+      indicators.unshift(
+        <Text
+          style   = {inactiveIndicatorStyle}
+          key     = {`paddingLeft_${i}`}
+          onPress = {() => this.scrollTo(children.length - i)}
+        >
+          {inactiveIndicatorText}
+        </Text>
+      );
+
+      indicators.push(
+        <Text
+          style   = {inactiveIndicatorStyle}
+          key     = {`paddingRight_${i}`}
+          onPress = {() => this.scrollTo(i - 1)}
+        >
+          {inactiveIndicatorText}
+        </Text>
+      )
+    }
+
+    return indicators;
   },
 
   renderPageIndicator() {
     const {hideIndicators} = this.props;
     if (hideIndicators) return null;
 
-    const {activePage} = this.state;
     const {children} = this.props;
+    const {activePage} = this.state;
 
-    const indicators = [];
+    let indicators = [];
     for (var i = 0, l = children.length; i < l; i++) {
-      if (children[i] === undefined) continue;
-
       const isActive  = i === activePage;
 
       const {indicatorStyle, inactiveIndicatorStyle} = this.props;
@@ -130,6 +179,8 @@ var Carousel = React.createClass({
     } else {
       indicatorsContStyle.top = indicatorOffset;
     }
+
+    indicators = this.addPaddingsToIndicators(indicators, indicatorContWidth);
 
     return <View style={[styles.pageIndicator, indicatorsContStyle]}>
       {indicators}
