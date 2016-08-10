@@ -80,48 +80,60 @@ var Carousel = React.createClass({
     }
   },
 
+  calcIndicatorsPosition(indicatorContWidth) {
+    return (this.getWidth() - indicatorContWidth) / 2;
+  },
+
   renderPageIndicator() {
-    if (this.props.hideIndicators === true) {
-      return null;
-    }
+    const {hideIndicators} = this.props;
+    if (hideIndicators) return null;
 
-    var indicators = [],
-      indicatorStyle = this.props.indicatorAtBottom ? {bottom: this.props.indicatorOffset} : {top: this.props.indicatorOffset},
-      style, position;
+    const {activePage} = this.state;
+    const {children} = this.props;
 
-    position = {
-      width: this.props.children.length * this.props.indicatorSpace,
-    };
-    position.left = (this.getWidth() - position.width) / 2;
+    const indicators = [];
+    for (var i = 0, l = children.length; i < l; i++) {
+      if (children[i] === undefined) continue;
 
-    for (var i = 0, l = this.props.children.length; i < l; i++) {
-      if (typeof this.props.children[i] === "undefined") {
-        continue;
-      }
+      const isActive  = i === activePage;
+      
+      const {indicatorStyle, inactiveIndicatorStyle} = this.props;
+      const style = isActive ? indicatorStyle : inactiveIndicatorStyle;
 
-      style = i === this.state.activePage
-        ? this.props.indicatorStyle
-        : this.props.inactiveIndicatorStyle;
+      const {indicatorText, inactiveIndicatorText} = this.props;
+      const text = isActive ? indicatorText : inactiveIndicatorText;
+
       indicators.push(
         <Text
-          style={style}
-          key={i}
-          onPress={this.scrollTo.bind(this,i)}
+          style   = {style}
+          key     = {i}
+          onPress = {() => this.scrollTo(i)}
         >
-          { i === this.state.activePage ? this.props.indicatorText : this.props.inactiveIndicatorText }
+          {text}
         </Text>
       );
     }
 
-    if (indicators.length === 1) {
-      return null;
+    if (indicators.length === 1) return null;
+
+    const {indicatorSpace} = this.props;
+    const indicatorContWidth = children.length * indicatorSpace;
+
+    const indicatorsContStyle = {
+      width: indicatorContWidth,
+      left: this.calcIndicatorsPosition(indicatorContWidth)
+    };
+
+    const {indicatorAtBottom, indicatorOffset} = this.props;
+    if (indicatorAtBottom) {
+      indicatorsContStyle.bottom = indicatorOffset;
+    } else {
+      indicatorsContStyle.top = indicatorOffset;
     }
 
-    return (
-      <View style={[styles.pageIndicator, position, indicatorStyle]}>
-        {indicators}
-      </View>
-    );
+    return <View style={[styles.pageIndicator, indicatorsContStyle]}>
+      {indicators}
+    </View>;
   },
 
   renderLeftArr() {
