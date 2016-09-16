@@ -104,7 +104,7 @@ var Carousel = React.createClass({
     if (isWidthContainIndicators) return indicators;
 
     const {
-      children,
+      images,
       indicatorsPadding,
       inactiveIndicatorStyle,
       inactiveIndicatorText
@@ -115,7 +115,7 @@ var Carousel = React.createClass({
         <Text
           style   = {inactiveIndicatorStyle}
           key     = {`paddingLeft_${i}`}
-          onPress = {() => this.scrollTo(children.length - i)}
+          onPress = {() => this.scrollTo(images.length - i)}
         >
           {inactiveIndicatorText}
         </Text>
@@ -139,11 +139,11 @@ var Carousel = React.createClass({
     const {hideIndicators} = this.props;
     if (hideIndicators) return null;
 
-    const {children} = this.props;
+    const {images} = this.props;
     const {activePage} = this.state;
 
     let indicators = [];
-    for (var i = 0, l = children.length; i < l; i++) {
+    for (var i = 0, l = images.length; i < l; i++) {
       const isActive  = i === activePage;
 
       const {indicatorStyle, inactiveIndicatorStyle} = this.props;
@@ -166,7 +166,7 @@ var Carousel = React.createClass({
     if (indicators.length === 1) return null;
 
     const {indicatorSpace} = this.props;
-    const indicatorContWidth = children.length * indicatorSpace;
+    const indicatorContWidth = images.length * indicatorSpace;
 
     const indicatorsContStyle = {
       width: indicatorContWidth,
