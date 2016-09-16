@@ -1,5 +1,7 @@
 import React from 'react';
-import {ListView, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {ListView, TouchableOpacity, StyleSheet} from 'react-native';
+import Image from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Bar';
 import Dimensions from 'Dimensions';
 
 
@@ -29,6 +31,7 @@ const ImageCell = ({
       <Image
         onLoadStart = {() => console.log(uri, 'loading started')}
         onLoadEnd   = {() => console.log(uri, 'loading ended')}
+        inidicator  = {ProgressBar}
         source      = {{uri}}
         style       = {styles.image}
         resizeMode  = "cover"
@@ -57,8 +60,8 @@ var CarouselPager = React.createClass({
     return (
       <ListView
         ref                               = "cont"
-        dataSource                        = {ds.cloneWithRows(images)}
-        renderRow                         = {uri => <ImageCell uri={uri} onPress={onPress}/>}
+        dataSource                        = {ds.cloneWithRows(images.map((uri, i) => ({uri, i})))}
+        renderRow                         = {({uri, i}) => <ImageCell uri={uri} onPress={() => onPress(i)}/>}
         initialListSize                   = {1}
         pageSize                          = {1}
         automaticallyAdjustContentInsets  = {false}

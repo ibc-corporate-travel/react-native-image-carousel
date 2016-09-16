@@ -56,7 +56,7 @@ var Carousel = React.createClass({
       this.refs.pager.scrollToPage(this.props.initialPage, false);
     }
 
-    if (this.props.animate && this.props.children) {
+    if (this.props.animate && this.props.images) {
       this._setUpTimer();
     }
   },
@@ -90,14 +90,11 @@ var Carousel = React.createClass({
       style, position;
 
     position = {
-      width: this.props.children.length * this.props.indicatorSpace,
+      width: this.props.images.length * this.props.indicatorSpace,
     };
     position.left = (this.getWidth() - position.width) / 2;
 
-    for (var i = 0, l = this.props.children.length; i < l; i++) {
-      if (typeof this.props.children[i] === "undefined") {
-        continue;
-      }
+    for (var i = 0, l = this.props.images.length; i < l; i++) {
 
       style = i === this.state.activePage
         ? this.props.indicatorStyle
@@ -128,7 +125,7 @@ var Carousel = React.createClass({
     var {
       leftArr,
       arrowsTopOffset,
-      children,
+      images,
       loop
     } = this.props;
 
@@ -141,7 +138,7 @@ var Carousel = React.createClass({
       onPress = () => this.scrollTo(prev);
     } else {
       onPress = loop
-        ? () => this.scrollTo(children.length - 1)
+        ? () => this.scrollTo(images.length - 1)
         : () => null;
     }
 
@@ -159,7 +156,7 @@ var Carousel = React.createClass({
     var {
       rightArr,
       arrowsTopOffset,
-      children,
+      images,
       loop
     } = this.props;
 
@@ -168,7 +165,7 @@ var Carousel = React.createClass({
     var next = activePage + 1;
 
     var onPress;
-    if (next < children.length) {
+    if (next < images.length) {
       onPress = () => this.scrollTo(next);
     } else {
       onPress = loop
@@ -186,7 +183,7 @@ var Carousel = React.createClass({
   },
 
   _setUpTimer() {
-    if (this.props.children.length > 1) {
+    if (this.props.images.length > 1) {
       this.clearTimeout(this.timer);
       this.timer = this.setTimeout(this._animateNextPage, this.props.delay);
     }
@@ -194,7 +191,7 @@ var Carousel = React.createClass({
 
   _animateNextPage() {
     var activePage = 0;
-    if (this.state.activePage < this.props.children.length - 1) {
+    if (this.state.activePage < this.props.images.length - 1) {
       activePage = this.state.activePage + 1;
     } else if (!this.props.loop) {
       return;
@@ -219,14 +216,14 @@ var Carousel = React.createClass({
     return (
       <View style={{ flex: 1 }}>
         <CarouselPager
+          onPress = {this.props.onPress}
+          images = {this.props.images}
           ref="pager"
           width={this.getWidth()}
           contentContainerStyle={styles.container}
           onBegin={this._onAnimationBeginPage}
           onEnd={this._onAnimationEnd}
-        >
-          {this.props.children}
-        </CarouselPager>
+        />
         {this.renderPageIndicator()}
         {this.renderLeftArr()}
         {this.renderRightArr()}
