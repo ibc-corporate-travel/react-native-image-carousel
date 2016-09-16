@@ -24,6 +24,7 @@ var Carousel = React.createClass({
       indicatorOffset: 250,
       indicatorText: '•',
       inactiveIndicatorText: '•',
+      indicatorsPadding: 3,
       width: null,
       initialPage: 0,
       indicatorSpace: 25,
@@ -80,45 +81,110 @@ var Carousel = React.createClass({
     }
   },
 
-  renderPageIndicator() {
-    if (this.props.hideIndicators === true) {
-      return null;
+  calcIndicatorsPosition(indicatorContWidth) {
+    const isWidthContainIndicators = this.getWidth() > indicatorContWidth;
+    if (isWidthContainIndicators) {
+      return (this.getWidth() - indicatorContWidth) / 2;
     }
 
-    var indicators = [],
-      indicatorStyle = this.props.indicatorAtBottom ? {bottom: this.props.indicatorOffset} : {top: this.props.indicatorOffset},
-      style, position;
+    const {indicatorSpace} = this.props;
+    const {activePage} = this.state;
+    const spaceToActiveIndicator = activePage * indicatorSpace;
 
-    position = {
-      width: this.props.images.length * this.props.indicatorSpace,
-    };
-    position.left = (this.getWidth() - position.width) / 2;
+    const diff = spaceToActiveIndicator - this.getWidth();
+    if (diff >= 0) {
+      return -(diff + indicatorSpace);
+    } else {
+      return 0;
+    }
+  },
 
-    for (var i = 0, l = this.props.images.length; i < l; i++) {
+  addPaddingsToIndicators(indicators, indicatorContWidth) {
+    const isWidthContainIndicators = this.getWidth() > indicatorContWidth;
+    if (isWidthContainIndicators) return indicators;
 
-      style = i === this.state.activePage
-        ? this.props.indicatorStyle
-        : this.props.inactiveIndicatorStyle;
+    const {
+      children,
+      indicatorsPadding,
+      inactiveIndicatorStyle,
+      inactiveIndicatorText
+    } = this.props;
+
+    for (let i = 1, l = indicatorsPadding; i <= l; i++) {
+      indicators.unshift(
+        <Text
+          style   = {inactiveIndicatorStyle}
+          key     = {`paddingLeft_${i}`}
+          onPress = {() => this.scrollTo(children.length - i)}
+        >
+          {inactiveIndicatorText}
+        </Text>
+      );
+
       indicators.push(
         <Text
-          style={style}
-          key={i}
-          onPress={this.scrollTo.bind(this,i)}
+          style   = {inactiveIndicatorStyle}
+          key     = {`paddingRight_${i}`}
+          onPress = {() => this.scrollTo(i - 1)}
         >
-          { i === this.state.activePage ? this.props.indicatorText : this.props.inactiveIndicatorText }
+          {inactiveIndicatorText}
+        </Text>
+      )
+    }
+
+    return indicators;
+  },
+
+  renderPageIndicator() {
+    const {hideIndicators} = this.props;
+    if (hideIndicators) return null;
+
+    const {children} = this.props;
+    const {activePage} = this.state;
+
+    let indicators = [];
+    for (var i = 0, l = children.length; i < l; i++) {
+      const isActive  = i === activePage;
+
+      const {indicatorStyle, inactiveIndicatorStyle} = this.props;
+      const style = isActive ? indicatorStyle : inactiveIndicatorStyle;
+
+      const {indicatorText, inactiveIndicatorText} = this.props;
+      const text = isActive ? indicatorText : inactiveIndicatorText;
+
+      indicators.push(
+        <Text
+          style   = {style}
+          key     = {i}
+          onPress = {this.scrollTo.bind(this, i)}
+        >
+          {text}
         </Text>
       );
     }
 
-    if (indicators.length === 1) {
-      return null;
+    if (indicators.length === 1) return null;
+
+    const {indicatorSpace} = this.props;
+    const indicatorContWidth = children.length * indicatorSpace;
+
+    const indicatorsContStyle = {
+      width: indicatorContWidth,
+      left: this.calcIndicatorsPosition(indicatorContWidth)
+    };
+
+    const {indicatorAtBottom, indicatorOffset} = this.props;
+    if (indicatorAtBottom) {
+      indicatorsContStyle.bottom = indicatorOffset;
+    } else {
+      indicatorsContStyle.top = indicatorOffset;
     }
 
-    return (
-      <View style={[styles.pageIndicator, position, indicatorStyle]}>
-        {indicators}
-      </View>
-    );
+    indicators = this.addPaddingsToIndicators(indicators, indicatorContWidth);
+
+    return <View style={[styles.pageIndicator, indicatorsContStyle]}>
+      {indicators}
+    </View>;
   },
 
   renderLeftArr() {
