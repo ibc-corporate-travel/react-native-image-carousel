@@ -1,7 +1,5 @@
-import React from 'react';
-import {ListView, TouchableOpacity, StyleSheet} from 'react-native';
-import Image from 'react-native-image-progress';
-import ProgressBar from 'react-native-progress/Bar';
+import React, {Component} from 'react';
+import {ListView, TouchableOpacity, Image, ActivityIndicator, StyleSheet} from 'react-native';
 import Dimensions from 'Dimensions';
 
 
@@ -22,22 +20,41 @@ const styles = StyleSheet.create({
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-const ImageCell = ({
-  uri,
-  onPress
-}) => {
-  return (
-    <TouchableOpacity style={styles.imageContainer} onPress={onPress}>
-      <Image
-        onLoadStart = {() => console.log(uri, 'loading started')}
-        onLoadEnd   = {() => console.log(uri, 'loading ended')}
-        inidicator  = {ProgressBar}
-        source      = {{uri}}
-        style       = {styles.image}
-        resizeMode  = "cover"
-      />
-    </TouchableOpacity>
-  );
+class ImageCell extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isImageLoaded: false
+    };
+  }
+
+  render() {
+    const {uri, onPress} = this.props;
+    const {isImageLoaded} = this.state;
+
+    return (
+      <TouchableOpacity style={styles.imageContainer} onPress={onPress}>
+        <ActivityIndicator
+          animating = {!isImageLoaded}
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0
+          }}
+        />
+        <Image
+          onLoadEnd   = {() => this.setState({isImageLoaded: true})}
+          source      = {{uri}}
+          style       = {styles.image}
+          resizeMode  = "cover"
+        />
+      </TouchableOpacity>
+    );
+  }
 };
 
 var CarouselPager = React.createClass({
