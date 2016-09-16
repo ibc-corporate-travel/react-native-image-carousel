@@ -1,6 +1,6 @@
-var {StyleSheet} = require('react-native');
+import {StyleSheet} from 'react-native';
 
-module.exports = StyleSheet.create({
+export default StyleSheet.create({
   pageIndicator: {
     position: 'absolute',
     flexDirection: 'row',
@@ -10,10 +10,12 @@ module.exports = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor:'transparent',
   },
+
   defaultIndicatorStyle: {
     color: '#000000',
     fontSize: 50,
   },
+  
   defaultInactiveIndicatorStyle: {
     fontSize: 50,
     color: '#999999',

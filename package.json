@@ -1,8 +1,8 @@
 {
   "name": "react-native-carousel",
-  "version": "0.10.0",
+  "version": "1.0.0-rc0",
   "description": "Simple carousel component for react-native",
-  "main": "Carousel.js",
+  "main": "src/Carousel/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,8 +21,6 @@
   },
   "homepage": "https://github.com/nick/react-native-carousel",
   "dependencies": {
-    "react-native-image-progress": "^0.6.0",
-    "react-native-progress": "^3.1.0",
     "react-timer-mixin": "^0.13.3"
   },
   "peerDependencies": {
