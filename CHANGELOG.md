@@ -1,3 +1,13 @@
+### 1.0.0-rc0
+- props broken changes
+- items declaration: used props instead of children
+- fixed raced fetch
+- used ListView for both ios and android
+- added paddings for indicators
+- added arrows
+- project was rewritten with es2015
+- massive refactoring
+
 ### 0.10.0
 - Fix horizontal scroll in RN v0.28 (@sghiassy, @dmccer)
 
