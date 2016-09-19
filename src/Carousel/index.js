@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
-import Dimensions from 'Dimensions';
+import {Text, View, TouchableOpacity, Dimensions} from 'react-native';
+// import Dimensions from 'Dimensions';
 import TimerMixin from 'react-timer-mixin';
 import CarouselPager from './CarouselPager';
 import styles from './styles';
