@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import Dimensions from 'Dimensions';
+import {StyleSheet, Dimensions} from 'react-native';
+// import Dimensions from 'Dimensions';
 
 const windowWidth = Dimensions.get('window').width;
 
