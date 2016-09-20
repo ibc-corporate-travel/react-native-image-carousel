@@ -2,9 +2,8 @@
 
 import React from 'react';
 import {Text, View, TouchableOpacity, Dimensions} from 'react-native';
-// import Dimensions from 'Dimensions';
 import TimerMixin from 'react-timer-mixin';
-import CarouselPager from './CarouselPager';
+import CarouselPager from '../CarouselPager';
 import styles from './styles';
 
 const windowWidth = Dimensions.get('window').width;

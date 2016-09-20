@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {TouchableOpacity, Image, ActivityIndicator} from 'react-native';
 import styles from './styles';
 
-class ImageCell extends Component {
+export default class CarouselItem extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
 import {ListView} from 'react-native';
-import CarouselItem from './CarouselItem';
+import CarouselItem from '../CarouselItem';
 
 const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class CarouselPager extends Component {
+  constructor(props) {
+    super(props);
+    this._onMomentumScrollEnd = this._onMomentumScrollEnd.bind(this);
+  }
+
   scrollToPage(page, animated) {
     if (typeof animated === 'undefined') {
       animated = true;
